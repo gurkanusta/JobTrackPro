@@ -1,0 +1,1816 @@
+﻿<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>JobTrackPro – All-in-one HTML Panel</title>
+    <style>
+        :root {
+            --bg: #0b0f19;
+            --card: #111827;
+            --muted: #94a3b8;
+            --text: #e5e7eb;
+            --line: #1f2937;
+            --good: #22c55e;
+            --warn: #a855f7;
+            --bad: #ef4444;
+            --info: #3b82f6;
+            --chip: #0f172a;
+            --shadow: 0 10px 30px rgba(0,0,0,.35);
+            --r: 16px;
+        }
+
+        .light {
+            --bg: #f6f7fb;
+            --card: #ffffff;
+            --muted: #64748b;
+            --text: #0f172a;
+            --line: #e2e8f0;
+            --chip: #f1f5f9;
+            --shadow: 0 10px 30px rgba(2,6,23,.12);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial;
+            background: var(--bg);
+            color: var(--text)
+        }
+
+        a {
+            color: inherit
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: 270px 1fr;
+            min-height: 100vh
+        }
+
+        .sidebar {
+            border-right: 1px solid var(--line);
+            padding: 18px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            background: linear-gradient(180deg, rgba(255,255,255,.03), transparent)
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            background: linear-gradient(135deg,#2563eb,#a855f7);
+            box-shadow: var(--shadow)
+        }
+
+        .brand h1 {
+            font-size: 18px;
+            margin: 0
+        }
+
+        .brand p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .nav {
+            margin-top: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+            .nav button {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                width: 100%;
+                border: 1px solid var(--line);
+                background: transparent;
+                color: var(--text);
+                padding: 10px 12px;
+                border-radius: 14px;
+                cursor: pointer;
+                transition: .15s transform, .15s background;
+            }
+
+                .nav button:hover {
+                    background: rgba(255,255,255,.04);
+                    transform: translateY(-1px)
+                }
+
+                .nav button.active {
+                    background: rgba(37,99,235,.18);
+                    border-color: rgba(37,99,235,.35)
+                }
+
+            .nav .dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 999px;
+                background: var(--muted);
+                opacity: .8
+            }
+
+            .nav button.active .dot {
+                background: #2563eb
+            }
+
+        .sidebar .box {
+            margin-top: 14px;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: rgba(255,255,255,.03)
+        }
+
+            .sidebar .box h3 {
+                margin: 0 0 8px 0;
+                font-size: 13px;
+                color: var(--muted);
+                font-weight: 600
+            }
+
+            .sidebar .box .row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px
+            }
+
+        .sidebar label {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .sidebar input, .sidebar select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            background: var(--card);
+            color: var(--text);
+            outline: none;
+        }
+
+        .main {
+            padding: 18px 18px 40px 18px
+        }
+
+        .topbar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            background: linear-gradient(180deg, var(--bg), rgba(0,0,0,0));
+            padding: 14px 0;
+            z-index: 5;
+        }
+
+        .search {
+            flex: 1;
+            display: flex;
+            gap: 10px;
+            align-items: center
+        }
+
+            .search input {
+                flex: 1;
+                padding: 12px 14px;
+                border-radius: 14px;
+                border: 1px solid var(--line);
+                background: rgba(255,255,255,.03);
+                color: var(--text);
+                outline: none;
+            }
+
+        .btn {
+            border: 1px solid var(--line);
+            background: var(--card);
+            color: var(--text);
+            padding: 12px 14px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: .15s transform,.15s opacity;
+        }
+
+            .btn:hover {
+                transform: translateY(-1px);
+                opacity: .95
+            }
+
+            .btn.primary {
+                background: linear-gradient(135deg,#2563eb,#7c3aed);
+                border-color: transparent
+            }
+
+            .btn.ghost {
+                background: transparent
+            }
+
+        .grid {
+            display: grid;
+            gap: 12px
+        }
+
+            .grid.cols4 {
+                grid-template-columns: repeat(4, minmax(0,1fr))
+            }
+
+            .grid.cols2 {
+                grid-template-columns: repeat(2, minmax(0,1fr))
+            }
+
+        @media (max-width: 980px) {
+            .app {
+                grid-template-columns: 1fr
+            }
+
+            .sidebar {
+                position: relative;
+                height: auto
+            }
+
+            .grid.cols4 {
+                grid-template-columns: repeat(2, minmax(0,1fr))
+            }
+
+            .grid.cols2 {
+                grid-template-columns: 1fr
+            }
+
+            .topbar {
+                position: relative
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--r);
+            box-shadow: var(--shadow);
+            padding: 14px;
+        }
+
+            .card h2 {
+                margin: 0 0 8px 0;
+                font-size: 16px
+            }
+
+        .muted {
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .stat {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px
+        }
+
+            .stat .n {
+                font-size: 26px;
+                font-weight: 800;
+                line-height: 1.1
+            }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: var(--chip);
+            font-size: 12px
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,.04)
+        }
+
+            .badge.Applied {
+                border-color: rgba(59,130,246,.4);
+                background: rgba(59,130,246,.14)
+            }
+
+            .badge.Interview {
+                border-color: rgba(168,85,247,.4);
+                background: rgba(168,85,247,.14)
+            }
+
+            .badge.Offer {
+                border-color: rgba(34,197,94,.4);
+                background: rgba(34,197,94,.14)
+            }
+
+            .badge.Rejected {
+                border-color: rgba(239,68,68,.4);
+                background: rgba(239,68,68,.14)
+            }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px
+        }
+
+        th {
+            font-size: 12px;
+            color: var(--muted);
+            text-align: left;
+            font-weight: 700;
+            padding: 0 10px
+        }
+
+        td {
+            padding: 12px 10px;
+            background: rgba(255,255,255,.03);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line)
+        }
+
+        tr td:first-child {
+            border-left: 1px solid var(--line);
+            border-top-left-radius: 14px;
+            border-bottom-left-radius: 14px
+        }
+
+        tr td:last-child {
+            border-right: 1px solid var(--line);
+            border-top-right-radius: 14px;
+            border-bottom-right-radius: 14px
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,.06)
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .pill {
+            padding: 8px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--text);
+            cursor: pointer
+        }
+
+            .pill:hover {
+                background: rgba(255,255,255,.04)
+            }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: end
+        }
+
+            .filters .f {
+                display: flex;
+                flex-direction: column;
+                gap: 6px
+            }
+
+            .filters input, .filters select {
+                padding: 10px;
+                border-radius: 12px;
+                border: 1px solid var(--line);
+                background: rgba(255,255,255,.03);
+                color: var(--text);
+                outline: none;
+            }
+
+        .banner {
+            display: none;
+            padding: 10px 12px;
+            border-radius: 14px;
+            border: 1px dashed rgba(251,191,36,.45);
+            background: rgba(251,191,36,.10);
+            color: #fbbf24;
+        }
+
+            .banner.show {
+                display: block
+            }
+
+        .toast-wrap {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 99
+        }
+
+        .toast {
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            background: var(--card);
+            box-shadow: var(--shadow);
+            max-width: 360px
+        }
+
+            .toast .t {
+                font-weight: 700;
+                margin: 0 0 4px 0
+            }
+
+            .toast .d {
+                margin: 0;
+                color: var(--muted);
+                font-size: 12px
+            }
+        /* Drawer */
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.55);
+            display: none;
+            z-index: 50
+        }
+
+        .drawer {
+            position: fixed;
+            right: -520px;
+            top: 0;
+            height: 100vh;
+            width: min(520px, 92vw);
+            background: var(--card);
+            border-left: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            transition: right .2s ease;
+            z-index: 51;
+            padding: 14px;
+            overflow: auto;
+        }
+
+            .drawer.open {
+                right: 0
+            }
+
+        .drawer-overlay.show {
+            display: block
+        }
+
+        .drawer h2 {
+            margin: 6px 0 10px 0
+        }
+
+        .drawer .grid2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px
+        }
+
+        .drawer label {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .drawer input, .drawer select, .drawer textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,.03);
+            color: var(--text);
+            outline: none;
+        }
+
+        .drawer textarea {
+            min-height: 110px;
+            resize: vertical
+        }
+        /* Kanban */
+        .kanban {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0,1fr));
+            gap: 12px
+        }
+
+        @media (max-width: 1100px) {
+            .kanban {
+                grid-template-columns: repeat(2,minmax(0,1fr))
+            }
+        }
+
+        .col {
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: rgba(255,255,255,.03);
+            padding: 10px
+        }
+
+            .col h3 {
+                margin: 0 0 10px 0;
+                font-size: 13px;
+                color: var(--muted)
+            }
+
+        .dropzone {
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .kcard {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 10px;
+            background: var(--card);
+            cursor: grab;
+        }
+
+            .kcard:active {
+                cursor: grabbing
+            }
+
+            .kcard .title {
+                font-weight: 800
+            }
+
+            .kcard .sub {
+                color: var(--muted);
+                font-size: 12px
+            }
+
+            .kcard.dragging {
+                opacity: .6
+            }
+
+        .dropzone.over {
+            outline: 2px dashed rgba(37,99,235,.6);
+            outline-offset: 6px
+        }
+        /* calendar */
+        .agenda {
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .day {
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 12px;
+            background: rgba(255,255,255,.03)
+        }
+
+            .day h3 {
+                margin: 0 0 8px 0;
+                font-size: 13px;
+                color: var(--muted)
+            }
+
+        .item {
+            padding: 10px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--card);
+            cursor: pointer
+        }
+
+            .item:hover {
+                background: rgba(255,255,255,.06)
+            }
+
+        .split {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px
+        }
+
+        canvas {
+            width: 100%;
+            height: 180px;
+            background: rgba(255,255,255,.02);
+            border: 1px solid var(--line);
+            border-radius: 16px
+        }
+
+        .small {
+            font-size: 12px
+        }
+
+        .kbd {
+            font-family: ui-monospace,SFMono-Regular,Menlo,monospace;
+            font-size: 11px;
+            padding: 3px 7px;
+            border-radius: 9px;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,.03)
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app" id="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo"></div>
+                <div>
+                    <h1>JobTrackPro</h1>
+                    <p>All-in-one HTML panel</p>
+                </div>
+            </div>
+
+            <div class="nav" id="nav">
+                <button data-view="dashboard" class="active"><span class="dot"></span> Dashboard</button>
+                <button data-view="jobs"><span class="dot"></span> Jobs</button>
+                <button data-view="kanban"><span class="dot"></span> Kanban</button>
+                <button data-view="calendar"><span class="dot"></span> Calendar</button>
+                <button data-view="settings"><span class="dot"></span> Settings</button>
+            </div>
+
+            <div class="box">
+                <h3>Backend</h3>
+                <div class="row">
+                    <div>
+                        <label>Base URL</label>
+                        <input id="baseUrl" placeholder="https://localhost:5001" />
+                    </div>
+                    <div>
+                        <label>Mode</label>
+                        <select id="mode">
+                            <option value="api">API</option>
+                            <option value="mock">Mock</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-top:10px; display:flex; gap:10px;">
+                    <button class="btn" id="btnPing">Test API</button>
+                    <button class="btn" id="btnReload">Reload</button>
+                </div>
+                <p class="muted" style="margin:10px 0 0 0;">
+                    İpucu: Frontend-backend farklı portsa CORS açık olmalı.
+                </p>
+            </div>
+
+            <div class="box">
+                <h3>Kısayollar</h3>
+                <div class="muted" style="display:flex; flex-direction:column; gap:6px;">
+                    <div><span class="kbd">/</span> arama</div>
+                    <div><span class="kbd">n</span> yeni job</div>
+                    <div><span class="kbd">esc</span> drawer kapat</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main">
+            <div class="topbar">
+                <div class="search">
+                    <input id="globalSearch" placeholder="Search company / position… (press /)" />
+                    <span class="chip" id="jobCountChip">0 jobs</span>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center">
+                    <button class="btn primary" id="btnNew">Add Job</button>
+                    <button class="btn ghost" id="btnTheme">Theme</button>
+                </div>
+            </div>
+
+            <div class="banner" id="mockBanner">Using mock data (API unreachable / mock mode).</div>
+
+            <!-- Dashboard -->
+            <section id="view-dashboard" class="grid" style="margin-top:12px;">
+                <div class="grid cols4">
+                    <div class="card"><div class="stat"><div><div class="muted">Total</div><div class="n" id="statTotal">0</div></div><span class="badge Applied">All</span></div><div class="muted">All applications</div></div>
+                    <div class="card"><div class="stat"><div><div class="muted">Applied</div><div class="n" id="statApplied">0</div></div><span class="badge Applied">Applied</span></div><div class="muted">Sent applications</div></div>
+                    <div class="card"><div class="stat"><div><div class="muted">Interview</div><div class="n" id="statInterview">0</div></div><span class="badge Interview">Interview</span></div><div class="muted">In interview process</div></div>
+                    <div class="card"><div class="stat"><div><div class="muted">Offer / Rejected</div><div class="n"><span id="statOffer">0</span> / <span id="statRejected">0</span></div></div><span class="badge Offer">Outcome</span></div><div class="muted">Final states</div></div>
+                </div>
+
+                <div class="grid cols2">
+                    <div class="card">
+                        <div class="split"><h2>Jobs by Status</h2><div class="muted small">simple canvas chart</div></div>
+                        <canvas id="chartStatus" width="900" height="220"></canvas>
+                    </div>
+                    <div class="card">
+                        <div class="split"><h2>Applications per Week</h2><div class="muted small">last 12 weeks</div></div>
+                        <canvas id="chartWeeks" width="900" height="220"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid cols2">
+                    <div class="card">
+                        <div class="split"><h2>Recent Jobs</h2><div class="muted small">latest 10</div></div>
+                        <div id="recentList" class="grid" style="gap:10px; margin-top:10px;"></div>
+                    </div>
+                    <div class="card">
+                        <div class="split"><h2>Upcoming Interviews</h2><div class="muted small">next 14 days</div></div>
+                        <div id="upcomingList" class="grid" style="gap:10px; margin-top:10px;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Jobs -->
+            <section id="view-jobs" class="grid" style="display:none; margin-top:12px;">
+                <div class="card">
+                    <div class="split">
+                        <div><h2>Jobs</h2><div class="muted">Filter, edit via drawer, export/import in Settings.</div></div>
+                        <div class="actions">
+                            <button class="pill" id="btnExportQuick">Export JSON</button>
+                            <button class="pill" id="btnRefreshJobs">Refresh</button>
+                        </div>
+                    </div>
+
+                    <div class="filters" style="margin-top:12px;">
+                        <div class="f" style="min-width:220px; flex:1">
+                            <label class="muted">Search</label>
+                            <input id="jobsSearch" placeholder="company / position" />
+                        </div>
+                        <div class="f">
+                            <label class="muted">Status</label>
+                            <select id="jobsStatus">
+                                <option value="">All</option>
+                                <option>Applied</option>
+                                <option>Interview</option>
+                                <option>Offer</option>
+                                <option>Rejected</option>
+                            </select>
+                        </div>
+                        <div class="f"><label class="muted">Applied From</label><input id="dateFrom" type="date" /></div>
+                        <div class="f"><label class="muted">Applied To</label><input id="dateTo" type="date" /></div>
+                        <div class="f">
+                            <label class="muted">Page Size</label>
+                            <select id="pageSize"><option>10</option><option>20</option><option>50</option></select>
+                        </div>
+                        <div class="f"><button class="btn primary" id="btnApplyFilters">Apply</button></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="split">
+                        <div class="muted" id="jobsMeta">0 results</div>
+                        <div class="actions">
+                            <button class="pill" id="btnPrev">Prev</button>
+                            <button class="pill" id="btnNext">Next</button>
+                        </div>
+                    </div>
+
+                    <div style="overflow:auto; margin-top:10px;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Position</th>
+                                    <th>Status</th>
+                                    <th>Applied</th>
+                                    <th>Interview</th>
+                                    <th>Links</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="jobsTbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Kanban -->
+            <section id="view-kanban" class="grid" style="display:none; margin-top:12px;">
+                <div class="card">
+                    <div class="split">
+                        <div><h2>Kanban</h2><div class="muted">Drag cards between columns to update status (PUT /api/Jobs/{id}).</div></div>
+                        <button class="pill" id="btnResetKanban">Rebuild Columns</button>
+                    </div>
+                </div>
+                <div class="kanban" id="kanban"></div>
+            </section>
+
+            <!-- Calendar -->
+            <section id="view-calendar" class="grid" style="display:none; margin-top:12px;">
+                <div class="card">
+                    <div class="split">
+                        <div><h2>Interview Agenda</h2><div class="muted">Grouped by interview date.</div></div>
+                        <button class="pill" id="btnRefreshAgenda">Refresh</button>
+                    </div>
+                </div>
+                <div class="agenda" id="agenda"></div>
+            </section>
+
+            <!-- Settings -->
+            <section id="view-settings" class="grid" style="display:none; margin-top:12px;">
+                <div class="grid cols2">
+                    <div class="card">
+                        <h2>Theme</h2>
+                        <div class="muted">Toggle light/dark. Saved to localStorage.</div>
+                        <div style="margin-top:10px;"><button class="btn" id="btnTheme2">Toggle Theme</button></div>
+                    </div>
+                    <div class="card">
+                        <h2>Data Tools</h2>
+                        <div class="muted">Export/Import JSON locally. Import does not bulk POST.</div>
+                        <div class="actions" style="margin-top:10px;">
+                            <button class="btn" id="btnExport">Export JSON</button>
+                            <label class="btn" style="display:inline-flex; align-items:center; gap:8px; cursor:pointer">
+                                Import JSON
+                                <input id="importFile" type="file" accept="application/json" style="display:none" />
+                            </label>
+                        </div>
+                        <div class="muted" style="margin-top:10px;">Import -> sadece bu panelin hafızasına yükler (API’ye basmaz).</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>Local Overrides</h2>
+                    <div class="muted">Import ettiğin data burada saklanır. İstersen temizle.</div>
+                    <div class="actions" style="margin-top:10px;"><button class="pill" id="btnClearLocal">Clear Local Imported Data</button></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Drawer -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+        <div class="split" style="position:sticky; top:0; background:var(--card); padding-bottom:10px; z-index:2">
+            <div>
+                <div class="muted" id="drawerMode">Edit Job</div>
+                <h2 id="drawerTitle">Job</h2>
+            </div>
+            <div class="actions">
+                <button class="btn ghost" id="btnClose">Close</button>
+                <button class="btn primary" id="btnSave">Save</button>
+            </div>
+        </div>
+
+        <div class="muted" id="drawerHint" style="margin:8px 0 12px 0;">Save -> POST or PUT to API. No DELETE endpoint in backend.</div>
+
+        <div class="grid" style="gap:12px;">
+            <div class="grid2">
+                <div><label>Company Name *</label><input id="fCompany" placeholder="e.g. QNB" /></div>
+                <div><label>Position *</label><input id="fPosition" placeholder="e.g. .NET Intern" /></div>
+            </div>
+
+            <div class="grid2">
+                <div>
+                    <label>Status *</label>
+                    <select id="fStatus"><option>Applied</option><option>Interview</option><option>Offer</option><option>Rejected</option></select>
+                </div>
+                <div><label>Applied Date *</label><input id="fApplied" type="date" /></div>
+            </div>
+
+            <div class="grid2">
+                <div><label>Interview Date</label><input id="fInterview" type="date" /></div>
+                <div><label>ID (readonly)</label><input id="fId" disabled /></div>
+            </div>
+
+            <div class="grid2">
+                <div><label>Job URL</label><input id="fJobUrl" placeholder="https://..." /></div>
+                <div><label>Company URL</label><input id="fCompanyUrl" placeholder="https://..." /></div>
+            </div>
+
+            <div><label>Notes</label><textarea id="fNotes" placeholder="notes..." style="min-height:110px; resize:vertical"></textarea></div>
+
+            <div class="card" style="background:rgba(255,255,255,.02)">
+                <div class="split">
+                    <div><div style="font-weight:800">Quick Actions</div><div class="muted">Fast status / interview date actions.</div></div>
+                    <div class="actions">
+                        <button class="pill" id="qaInterview">Set Interview = Today</button>
+                        <button class="pill" id="qaClearInterview">Clear Interview</button>
+                    </div>
+                </div>
+                <div class="muted" style="margin-top:8px;">Not: Backend alan adların farklıysa, mapping’i JS kısmında normalizeJob() içinde düzenle.</div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="toast-wrap" id="toasts"></div>
+
+    <script>
+        (function () {
+            const $ = (id) => document.getElementById(id);
+
+            const fmtDate = (iso) => {
+                if (!iso) return "";
+                const d = new Date(iso);
+                if (Number.isNaN(d.getTime())) return "";
+                const y = d.getFullYear(), m = String(d.getMonth() + 1).padStart(2, "0"), da = String(d.getDate()).padStart(2, "0");
+                return `${y}-${m}-${da}`;
+            };
+            const parseDate = (yyyy_mm_dd) => {
+                if (!yyyy_mm_dd) return null;
+                const d = new Date(yyyy_mm_dd + "T00:00:00");
+                return Number.isNaN(d.getTime()) ? null : d;
+            };
+            const addDays = (d, days) => new Date(d.getTime() + days * 24 * 60 * 60 * 1000);
+            const startOfWeek = (d) => {
+                const x = new Date(d);
+                const day = (x.getDay() + 6) % 7; // monday=0
+                x.setDate(x.getDate() - day);
+                x.setHours(0, 0, 0, 0);
+                return x;
+            };
+            const weekKey = (d) => fmtDate(startOfWeek(d).toISOString());
+            const guid = () => (crypto?.randomUUID ? crypto.randomUUID() : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+                const r = Math.random() * 16 | 0, v = c === "x" ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            }));
+            const escapeHtml = (s) => String(s ?? "").replace(/[&<>"']/g, m => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+            }[m]));
+            const toast = (title, desc = "") => {
+                const wrap = $("toasts");
+                const el = document.createElement("div");
+                el.className = "toast";
+                el.innerHTML = `<p class="t">${escapeHtml(title)}</p><p class="d">${escapeHtml(desc)}</p>`;
+                wrap.appendChild(el);
+                setTimeout(() => { el.style.opacity = "0"; el.style.transform = "translateY(6px)"; }, 2800);
+                setTimeout(() => { el.remove(); }, 3400);
+            };
+            const isValidUrl = (s) => {
+                if (!s) return true;
+                try { new URL(s); return true; } catch { return false; }
+            };
+
+            const LS = { baseUrl: "jtp_baseUrl", theme: "jtp_theme", mode: "jtp_mode", localImport: "jtp_local_import" };
+
+            const state = {
+                jobs: [],
+                usingMock: false,
+                localImportedJobs: null,
+                view: "dashboard",
+                page: 1,
+                pageSize: 10,
+                globalSearch: "",
+                editing: null,
+                drawerMode: "edit",
+            };
+
+            const mockJobs = [
+                { id: guid(), companyName: "QNB", position: ".NET Intern", status: "Applied", appliedDate: new Date().toISOString(), notes: "Mock sample", jobUrl: "", companyUrl: "" },
+                { id: guid(), companyName: "Akbank", position: "Backend Intern", status: "Interview", appliedDate: addDays(new Date(), -10).toISOString(), interviewDate: addDays(new Date(), 3).toISOString(), notes: "Interview soon", jobUrl: "", companyUrl: "" },
+                { id: guid(), companyName: "Trendyol", position: "Software Intern", status: "Rejected", appliedDate: addDays(new Date(), -25).toISOString(), notes: "Rejected", jobUrl: "", companyUrl: "" },
+                { id: guid(), companyName: "Garanti BBVA", position: "Junior .NET", status: "Offer", appliedDate: addDays(new Date(), -40).toISOString(), notes: "Offer received", jobUrl: "", companyUrl: "" },
+            ];
+
+            const views = {
+                dashboard: $("view-dashboard"),
+                jobs: $("view-jobs"),
+                kanban: $("view-kanban"),
+                calendar: $("view-calendar"),
+                settings: $("view-settings")
+            };
+
+            function applyTheme() {
+                const t = localStorage.getItem(LS.theme) || "dark";
+                document.documentElement.classList.toggle("light", t === "light");
+            }
+            function toggleTheme() {
+                const cur = localStorage.getItem(LS.theme) || "dark";
+                localStorage.setItem(LS.theme, cur === "dark" ? "light" : "dark");
+                applyTheme();
+                toast("Theme toggled", localStorage.getItem(LS.theme));
+            }
+
+            function getBaseUrl() {
+                return ($("baseUrl").value || "").trim().replace(/\/+$/, "");
+            }
+            async function fetchJson(path, opts = {}) {
+                const url = getBaseUrl() + path;
+                const res = await fetch(url, {
+                    ...opts,
+                    headers: { "Content-Type": "application/json", ...(opts.headers || {}) }
+                });
+                if (!res.ok) {
+                    const txt = await res.text().catch(() => "");
+                    throw new Error(`HTTP ${res.status} ${res.statusText} ${txt ? "- " + txt.slice(0, 180) : ""}`);
+                }
+                if (res.status === 204) return null;
+                return await res.json();
+            }
+
+            const apiGetJobs = () => fetchJson("/api/Jobs", { method: "GET" });
+            const apiGetJob = (id) => fetchJson(`/api/Jobs/${encodeURIComponent(id)}`, { method: "GET" });
+            const apiCreateJob = (payload) => fetchJson("/api/Jobs", { method: "POST", body: JSON.stringify(payload) });
+            const apiUpdateJob = (id, payload) => fetchJson(`/api/Jobs/${encodeURIComponent(id)}`, { method: "PUT", body: JSON.stringify(payload) });
+
+            function setBanner(show) { $("mockBanner").classList.toggle("show", !!show); }
+            function setJobChip() { $("jobCountChip").textContent = `${state.jobs.length} jobs`; }
+
+            function computeStats(jobs) {
+                const s = { total: jobs.length, Applied: 0, Interview: 0, Offer: 0, Rejected: 0 };
+                for (const j of jobs) { if (s[j.status] !== undefined) s[j.status]++; }
+                return s;
+            }
+
+            function normalizeJob(j) {
+                return {
+                    id: String(j.id ?? ""),
+                    companyName: j.companyName ?? j.company ?? "",
+                    position: j.position ?? j.role ?? "",
+                    status: j.status ?? "Applied",
+                    appliedDate: j.appliedDate ?? j.createdAt ?? new Date().toISOString(),
+                    interviewDate: j.interviewDate ?? null,
+                    notes: j.notes ?? "",
+                    jobUrl: j.jobUrl ?? "",
+                    companyUrl: j.companyUrl ?? ""
+                };
+            }
+
+            function loadLocalImported() {
+                try {
+                    const raw = localStorage.getItem(LS.localImport);
+                    if (!raw) return null;
+                    const arr = JSON.parse(raw);
+                    if (Array.isArray(arr)) return arr.map(normalizeJob);
+                } catch { }
+                return null;
+            }
+            function saveLocalImported(jobs) { localStorage.setItem(LS.localImport, JSON.stringify(jobs)); }
+
+            async function reloadAll() {
+                const mode = $("mode").value;
+                state.usingMock = (mode === "mock");
+                state.localImportedJobs = loadLocalImported();
+
+                if (state.localImportedJobs && state.localImportedJobs.length) {
+                    state.jobs = state.localImportedJobs;
+                    state.usingMock = true;
+                    setBanner(true);
+                    toast("Loaded local imported data", "API not used for imported dataset.");
+                    renderAll();
+                    return;
+                }
+                if (state.usingMock) {
+                    state.jobs = mockJobs.map(normalizeJob);
+                    setBanner(true);
+                    renderAll();
+                    return;
+                }
+                try {
+                    const list = await apiGetJobs();
+                    state.jobs = Array.isArray(list) ? list.map(normalizeJob) : [];
+                    state.usingMock = false;
+                    setBanner(false);
+                    toast("Loaded from API", `${state.jobs.length} jobs`);
+                    renderAll();
+                } catch (err) {
+                    state.jobs = mockJobs.map(normalizeJob);
+                    state.usingMock = true;
+                    setBanner(true);
+                    toast("API unreachable", "Using mock data.");
+                    renderAll();
+                }
+            }
+
+            function showView(name) {
+                state.view = name;
+                for (const k of Object.keys(views)) {
+                    views[k].style.display = (k === name) ? "" : "none";
+                }
+                for (const b of document.querySelectorAll("#nav button")) {
+                    b.classList.toggle("active", b.dataset.view === name);
+                }
+                if (name === "kanban") renderKanban();
+                if (name === "calendar") renderAgenda();
+            }
+
+            function applyGlobalSearch(list) {
+                const q = (state.globalSearch || "").trim().toLowerCase();
+                if (!q) return list;
+                return list.filter(j =>
+                    (j.companyName || "").toLowerCase().includes(q) ||
+                    (j.position || "").toLowerCase().includes(q)
+                );
+            }
+
+            function applyJobsFilters(list) {
+                const q = ($("jobsSearch").value || "").trim().toLowerCase();
+                const status = ($("jobsStatus").value || "").trim();
+                const from = $("dateFrom").value;
+                const to = $("dateTo").value;
+
+                let out = applyGlobalSearch(list);
+
+                if (q) {
+                    out = out.filter(j =>
+                        (j.companyName || "").toLowerCase().includes(q) ||
+                        (j.position || "").toLowerCase().includes(q)
+                    );
+                }
+                if (status) out = out.filter(j => j.status === status);
+
+                const dFrom = parseDate(from);
+                const dTo = parseDate(to);
+                if (dFrom) {
+                    out = out.filter(j => {
+                        const d = parseDate(fmtDate(j.appliedDate));
+                        return d && d >= dFrom;
+                    });
+                }
+                if (dTo) {
+                    out = out.filter(j => {
+                        const d = parseDate(fmtDate(j.appliedDate));
+                        return d && d <= dTo;
+                    });
+                }
+                return out;
+            }
+
+            function renderAll() {
+                setJobChip();
+                renderDashboard();
+                renderJobsTable();
+                if (state.view === "kanban") renderKanban();
+                if (state.view === "calendar") renderAgenda();
+            }
+
+            function renderDashboard() {
+                const jobs = applyGlobalSearch(state.jobs);
+                const stats = computeStats(jobs);
+
+                $("statTotal").textContent = stats.total;
+                $("statApplied").textContent = stats.Applied;
+                $("statInterview").textContent = stats.Interview;
+                $("statOffer").textContent = stats.Offer;
+                $("statRejected").textContent = stats.Rejected;
+
+                const recent = [...jobs].sort((a, b) => (new Date(b.appliedDate) - new Date(a.appliedDate))).slice(0, 10);
+                const recentWrap = $("recentList");
+                recentWrap.innerHTML = "";
+                for (const j of recent) {
+                    const el = document.createElement("div");
+                    el.className = "item";
+                    el.innerHTML = `
+            <div class="split">
+              <div>
+                <div style="font-weight:800">${escapeHtml(j.companyName)}</div>
+                <div class="muted">${escapeHtml(j.position)}</div>
+              </div>
+              <div style="text-align:right">
+                <div class="badge ${escapeHtml(j.status)}">${escapeHtml(j.status)}</div>
+                <div class="muted">${escapeHtml(fmtDate(j.appliedDate))}</div>
+              </div>
+            </div>`;
+                    el.addEventListener("click", () => openEdit(j.id));
+                    recentWrap.appendChild(el);
+                }
+
+                const now = new Date(); now.setHours(0, 0, 0, 0);
+                const end = addDays(now, 14);
+                const upcoming = jobs
+                    .filter(j => j.interviewDate && parseDate(fmtDate(j.interviewDate)))
+                    .map(j => ({ ...j, d: parseDate(fmtDate(j.interviewDate)) }))
+                    .filter(x => x.d && x.d >= now && x.d <= end)
+                    .sort((a, b) => a.d - b.d)
+                    .slice(0, 12);
+
+                const upWrap = $("upcomingList");
+                upWrap.innerHTML = "";
+                if (!upcoming.length) {
+                    const el = document.createElement("div");
+                    el.className = "muted";
+                    el.textContent = "No upcoming interviews in next 14 days.";
+                    upWrap.appendChild(el);
+                } else {
+                    for (const j of upcoming) {
+                        const el = document.createElement("div");
+                        el.className = "item";
+                        el.innerHTML = `
+              <div class="split">
+                <div>
+                  <div style="font-weight:800">${escapeHtml(j.companyName)}</div>
+                  <div class="muted">${escapeHtml(j.position)}</div>
+                </div>
+                <div style="text-align:right">
+                  <div class="badge Interview">Interview</div>
+                  <div class="muted">${escapeHtml(fmtDate(j.interviewDate))}</div>
+                </div>
+              </div>`;
+                        el.addEventListener("click", () => openEdit(j.id));
+                        upWrap.appendChild(el);
+                    }
+                }
+
+                drawStatusChart(stats);
+                drawWeeksChart(jobs);
+            }
+
+            function renderJobsTable() {
+                const all = applyJobsFilters(state.jobs);
+                const size = Number($("pageSize").value || 10);
+                state.pageSize = size;
+
+                const pages = Math.max(1, Math.ceil(all.length / size));
+                state.page = Math.min(state.page, pages);
+                const start = (state.page - 1) * size;
+                const slice = all.slice(start, start + size);
+
+                $("jobsMeta").textContent = `${all.length} results · page ${state.page}/${pages}`;
+
+                const tb = $("jobsTbody");
+                tb.innerHTML = "";
+
+                for (const j of slice) {
+                    const tr = document.createElement("tr");
+                    const links = [
+                        j.jobUrl ? `<a href="${escapeHtml(j.jobUrl)}" target="_blank" rel="noopener">job</a>` : "",
+                        j.companyUrl ? `<a href="${escapeHtml(j.companyUrl)}" target="_blank" rel="noopener">company</a>` : ""
+                    ].filter(Boolean).join(" · ") || `<span class="muted">—</span>`;
+
+                    tr.innerHTML = `
+            <td><div style="font-weight:800">${escapeHtml(j.companyName)}</div><div class="muted small">${escapeHtml(j.id)}</div></td>
+            <td>${escapeHtml(j.position)}</td>
+            <td><span class="badge ${escapeHtml(j.status)}">${escapeHtml(j.status)}</span></td>
+            <td class="small">${escapeHtml(fmtDate(j.appliedDate))}</td>
+            <td class="small">${escapeHtml(fmtDate(j.interviewDate)) || '<span class="muted">—</span>'}</td>
+            <td class="small">${links}</td>
+            <td>
+              <div class="actions">
+                <button class="pill" data-act="edit">Edit</button>
+                <button class="pill" data-act="status">Next Status</button>
+              </div>
+            </td>`;
+
+                    tr.addEventListener("click", (e) => {
+                        if (e.target && e.target.closest && e.target.closest("button")) return;
+                        openEdit(j.id);
+                    });
+                    tr.querySelector('[data-act="edit"]').addEventListener("click", () => openEdit(j.id));
+                    tr.querySelector('[data-act="status"]').addEventListener("click", () => nextStatus(j.id));
+                    tb.appendChild(tr);
+                }
+            }
+
+            function renderKanban() {
+                const wrap = $("kanban");
+                wrap.innerHTML = "";
+                const statuses = ["Applied", "Interview", "Offer", "Rejected"];
+                const jobs = applyGlobalSearch(state.jobs);
+
+                for (const st of statuses) {
+                    const col = document.createElement("div");
+                    col.className = "col";
+                    col.innerHTML = `<h3>${st}</h3><div class="dropzone" data-st="${st}"></div>`;
+                    const zone = col.querySelector(".dropzone");
+
+                    zone.addEventListener("dragover", (e) => { e.preventDefault(); zone.classList.add("over"); });
+                    zone.addEventListener("dragleave", () => zone.classList.remove("over"));
+                    zone.addEventListener("drop", async (e) => {
+                        e.preventDefault();
+                        zone.classList.remove("over");
+                        const id = e.dataTransfer.getData("text/job-id");
+                        if (!id) return;
+                        await updateStatus(id, st);
+                    });
+
+                    const items = jobs.filter(j => j.status === st);
+                    for (const j of items) {
+                        const card = document.createElement("div");
+                        card.className = "kcard";
+                        card.draggable = true;
+                        card.innerHTML = `
+              <div class="split">
+                <div>
+                  <div class="title">${escapeHtml(j.companyName)}</div>
+                  <div class="sub">${escapeHtml(j.position)}</div>
+                </div>
+                <span class="badge ${escapeHtml(j.status)}">${escapeHtml(j.status)}</span>
+              </div>
+              <div class="muted" style="margin-top:6px">Applied: ${escapeHtml(fmtDate(j.appliedDate))}${j.interviewDate ? " · Interview: " + escapeHtml(fmtDate(j.interviewDate)) : ""}</div>`;
+                        card.addEventListener("dragstart", (ev) => { card.classList.add("dragging"); ev.dataTransfer.setData("text/job-id", j.id); });
+                        card.addEventListener("dragend", () => card.classList.remove("dragging"));
+                        card.addEventListener("click", () => openEdit(j.id));
+                        zone.appendChild(card);
+                    }
+                    wrap.appendChild(col);
+                }
+            }
+
+            function renderAgenda() {
+                const wrap = $("agenda");
+                wrap.innerHTML = "";
+                const jobs = applyGlobalSearch(state.jobs)
+                    .filter(j => j.interviewDate && fmtDate(j.interviewDate))
+                    .map(j => ({ ...j, day: fmtDate(j.interviewDate) }))
+                    .sort((a, b) => new Date(a.interviewDate) - new Date(b.interviewDate));
+
+                if (!jobs.length) {
+                    const el = document.createElement("div");
+                    el.className = "card";
+                    el.innerHTML = `<h2>No interviews scheduled</h2><div class="muted">Add interviewDate in a job.</div>`;
+                    wrap.appendChild(el);
+                    return;
+                }
+
+                const groups = new Map();
+                for (const j of jobs) {
+                    if (!groups.has(j.day)) groups.set(j.day, []);
+                    groups.get(j.day).push(j);
+                }
+
+                for (const [day, items] of groups.entries()) {
+                    const dayEl = document.createElement("div");
+                    dayEl.className = "day";
+                    dayEl.innerHTML = `<h3>${escapeHtml(day)}</h3>`;
+                    for (const j of items) {
+                        const it = document.createElement("div");
+                        it.className = "item";
+                        it.innerHTML = `
+              <div class="split">
+                <div>
+                  <div style="font-weight:800">${escapeHtml(j.companyName)}</div>
+                  <div class="muted">${escapeHtml(j.position)}</div>
+                </div>
+                <span class="badge Interview">Interview</span>
+              </div>`;
+                        it.addEventListener("click", () => openEdit(j.id));
+                        dayEl.appendChild(it);
+                    }
+                    wrap.appendChild(dayEl);
+                }
+            }
+
+            function roundRect(ctx, x, y, w, h, r) {
+                const rr = Math.min(r, w / 2, h / 2);
+                ctx.beginPath();
+                ctx.moveTo(x + rr, y);
+                ctx.arcTo(x + w, y, x + w, y + h, rr);
+                ctx.arcTo(x + w, y + h, x, y + h, rr);
+                ctx.arcTo(x, y + h, x, y, rr);
+                ctx.arcTo(x, y, x + w, y, rr);
+                ctx.closePath();
+            }
+
+            function drawStatusChart(stats) {
+                const c = $("chartStatus");
+                const ctx = c.getContext("2d");
+                const W = c.width, H = c.height;
+                ctx.clearRect(0, 0, W, H);
+
+                const data = [
+                    { k: "Applied", v: stats.Applied, color: "#3b82f6" },
+                    { k: "Interview", v: stats.Interview, color: "#a855f7" },
+                    { k: "Offer", v: stats.Offer, color: "#22c55e" },
+                    { k: "Rejected", v: stats.Rejected, color: "#ef4444" },
+                ];
+                const max = Math.max(1, ...data.map(d => d.v));
+                const pad = 28;
+                const chartW = W - pad * 2;
+                const chartH = H - pad * 2;
+                const barW = chartW / data.length * 0.6;
+                const gap = chartW / data.length * 0.4;
+
+                ctx.globalAlpha = 0.6;
+                ctx.strokeStyle = "rgba(148,163,184,.25)";
+                ctx.beginPath();
+                ctx.moveTo(pad, H - pad);
+                ctx.lineTo(W - pad, H - pad);
+                ctx.stroke();
+                ctx.globalAlpha = 1;
+
+                data.forEach((d, i) => {
+                    const x = pad + i * (barW + gap) + gap / 2;
+                    const h = (d.v / max) * (chartH - 18);
+                    const y = H - pad - h;
+
+                    ctx.fillStyle = d.color;
+                    roundRect(ctx, x, y, barW, h, 10);
+                    ctx.fill();
+
+                    ctx.fillStyle = "rgba(148,163,184,.95)";
+                    ctx.font = "12px system-ui";
+                    ctx.fillText(d.k, x, H - pad + 16);
+
+                    ctx.fillStyle = "rgba(229,231,235,.95)";
+                    ctx.font = "bold 16px system-ui";
+                    ctx.fillText(String(d.v), x, y - 8);
+                });
+            }
+
+            function drawWeeksChart(jobs) {
+                const c = $("chartWeeks");
+                const ctx = c.getContext("2d");
+                const W = c.width, H = c.height;
+                ctx.clearRect(0, 0, W, H);
+
+                const now = new Date(); now.setHours(0, 0, 0, 0);
+                const start = addDays(now, -7 * 11);
+                const buckets = [];
+                for (let i = 0; i < 12; i++) {
+                    const d = addDays(start, i * 7);
+                    buckets.push({ key: weekKey(d), label: fmtDate(d.toISOString()).slice(5), v: 0 });
+                }
+                const map = new Map(buckets.map(b => [b.key, b]));
+                for (const j of jobs) {
+                    const d = parseDate(fmtDate(j.appliedDate));
+                    if (!d) continue;
+                    const key = weekKey(d);
+                    if (map.has(key)) map.get(key).v++;
+                }
+
+                const max = Math.max(1, ...buckets.map(b => b.v));
+                const pad = 28;
+                const chartW = W - pad * 2;
+                const chartH = H - pad * 2;
+
+                ctx.globalAlpha = 0.6;
+                ctx.strokeStyle = "rgba(148,163,184,.25)";
+                ctx.beginPath();
+                ctx.moveTo(pad, H - pad);
+                ctx.lineTo(W - pad, H - pad);
+                ctx.stroke();
+                ctx.globalAlpha = 1;
+
+                ctx.strokeStyle = "#2563eb";
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                buckets.forEach((b, i) => {
+                    const x = pad + (i / (buckets.length - 1)) * chartW;
+                    const y = H - pad - (b.v / max) * (chartH - 18);
+                    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                });
+                ctx.stroke();
+
+                buckets.forEach((b, i) => {
+                    const x = pad + (i / (buckets.length - 1)) * chartW;
+                    const y = H - pad - (b.v / max) * (chartH - 18);
+
+                    ctx.fillStyle = "#7c3aed";
+                    ctx.beginPath();
+                    ctx.arc(x, y, 5, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = "rgba(148,163,184,.95)";
+                    ctx.font = "11px system-ui";
+                    if (i % 2 === 0) ctx.fillText(b.label, x - 14, H - pad + 16);
+
+                    ctx.fillStyle = "rgba(229,231,235,.95)";
+                    ctx.font = "bold 13px system-ui";
+                    ctx.fillText(String(b.v), x - 4, y - 10);
+                });
+            }
+
+            function openDrawer(mode, job) {
+                state.drawerMode = mode;
+                state.editing = job ? { ...job } : null;
+
+                $("drawerOverlay").classList.add("show");
+                $("drawer").classList.add("open");
+
+                if (mode === "new") {
+                    $("drawerMode").textContent = "New Job";
+                    $("drawerTitle").textContent = "Create Job";
+                    $("drawerHint").textContent = "Save -> POST /api/Jobs";
+                    fillForm({
+                        id: "",
+                        companyName: "",
+                        position: "",
+                        status: "Applied",
+                        appliedDate: new Date().toISOString(),
+                        interviewDate: "",
+                        notes: "",
+                        jobUrl: "",
+                        companyUrl: ""
+                    });
+                    $("fId").value = "(auto)";
+                } else {
+                    $("drawerMode").textContent = "Edit Job";
+                    $("drawerTitle").textContent = `${job.companyName} · ${job.position}`;
+                    $("drawerHint").textContent = "Save -> PUT /api/Jobs/{id}";
+                    fillForm(job);
+                    $("fId").value = job.id || "";
+                }
+            }
+
+            function closeDrawer() {
+                $("drawerOverlay").classList.remove("show");
+                $("drawer").classList.remove("open");
+                state.editing = null;
+            }
+
+            function fillForm(job) {
+                $("fCompany").value = job.companyName || "";
+                $("fPosition").value = job.position || "";
+                $("fStatus").value = job.status || "Applied";
+                $("fApplied").value = fmtDate(job.appliedDate) || "";
+                $("fInterview").value = job.interviewDate ? fmtDate(job.interviewDate) : "";
+                $("fNotes").value = job.notes || "";
+                $("fJobUrl").value = job.jobUrl || "";
+                $("fCompanyUrl").value = job.companyUrl || "";
+                $("fId").value = job.id || "";
+            }
+
+            function readForm() {
+                const companyName = ($("fCompany").value || "").trim();
+                const position = ($("fPosition").value || "").trim();
+                const status = ($("fStatus").value || "Applied").trim();
+                const applied = ($("fApplied").value || "").trim();
+                const interview = ($("fInterview").value || "").trim();
+                const notes = ($("fNotes").value || "").trim();
+                const jobUrl = ($("fJobUrl").value || "").trim();
+                const companyUrl = ($("fCompanyUrl").value || "").trim();
+
+                if (!companyName) throw new Error("Company Name is required.");
+                if (!position) throw new Error("Position is required.");
+                if (!applied) throw new Error("Applied Date is required.");
+                if (!isValidUrl(jobUrl)) throw new Error("Job URL is not valid.");
+                if (!isValidUrl(companyUrl)) throw new Error("Company URL is not valid.");
+
+                const dApplied = parseDate(applied);
+                const dInterview = parseDate(interview);
+                if (dApplied && dInterview && dInterview < dApplied) throw new Error("Interview Date must be >= Applied Date.");
+
+                return {
+                    companyName,
+                    position,
+                    status,
+                    appliedDate: dApplied ? dApplied.toISOString() : new Date().toISOString(),
+                    interviewDate: dInterview ? dInterview.toISOString() : null,
+                    notes,
+                    jobUrl,
+                    companyUrl
+                };
+            }
+
+            async function openEdit(id) {
+                const local = state.jobs.find(x => x.id === id);
+                if (local) { openDrawer("edit", local); return; }
+                if (state.usingMock) return;
+                try {
+                    const j = normalizeJob(await apiGetJob(id));
+                    openDrawer("edit", j);
+                } catch (e) {
+                    toast("Failed to load job", e.message || String(e));
+                }
+            }
+
+            async function saveJob() {
+                try {
+                    const payload = readForm();
+
+                    if (state.localImportedJobs && state.localImportedJobs.length) {
+                        if (state.drawerMode === "new") {
+                            state.jobs.unshift(normalizeJob({ id: guid(), ...payload }));
+                            saveLocalImported(state.jobs);
+                            toast("Saved locally", "Added to imported dataset.");
+                        } else {
+                            const id = state.editing?.id;
+                            const idx = state.jobs.findIndex(x => x.id === id);
+                            if (idx >= 0) {
+                                state.jobs[idx] = normalizeJob({ ...state.jobs[idx], ...payload });
+                                saveLocalImported(state.jobs);
+                                toast("Saved locally", "Updated imported dataset.");
+                            }
+                        }
+                        closeDrawer(); renderAll(); return;
+                    }
+
+                    if (state.usingMock) {
+                        if (state.drawerMode === "new") {
+                            state.jobs.unshift(normalizeJob({ id: guid(), ...payload }));
+                            toast("Saved (mock)", "Created locally.");
+                        } else {
+                            const id = state.editing?.id;
+                            const idx = state.jobs.findIndex(x => x.id === id);
+                            if (idx >= 0) {
+                                state.jobs[idx] = normalizeJob({ ...state.jobs[idx], ...payload });
+                                toast("Saved (mock)", "Updated locally.");
+                            }
+                        }
+                        closeDrawer(); renderAll(); return;
+                    }
+
+                    if (state.drawerMode === "new") {
+                        const created = normalizeJob(await apiCreateJob(payload));
+                        state.jobs.unshift(created.id ? created : normalizeJob({ id: guid(), ...payload }));
+                        toast("Created", "POST /api/Jobs");
+                    } else {
+                        const id = state.editing?.id;
+                        if (!id) throw new Error("Missing id for update.");
+                        const updated = normalizeJob(await apiUpdateJob(id, { id, ...payload }));
+                        const idx = state.jobs.findIndex(x => x.id === id);
+                        if (idx >= 0) state.jobs[idx] = updated.id ? updated : normalizeJob({ id, ...payload });
+                        toast("Updated", "PUT /api/Jobs/{id}");
+                    }
+
+                    closeDrawer(); renderAll();
+                } catch (e) {
+                    toast("Save failed", e.message || String(e));
+                }
+            }
+
+            async function updateStatus(id, newStatus) {
+                const idx = state.jobs.findIndex(x => x.id === id);
+                if (idx < 0) return;
+                const prev = state.jobs[idx];
+                state.jobs[idx] = normalizeJob({ ...prev, status: newStatus });
+                renderAll();
+
+                if (state.localImportedJobs && state.localImportedJobs.length) {
+                    saveLocalImported(state.jobs);
+                    toast("Updated locally", `Status -> ${newStatus}`);
+                    return;
+                }
+                if (state.usingMock) {
+                    toast("Updated (mock)", `Status -> ${newStatus}`);
+                    return;
+                }
+                try {
+                    await apiUpdateJob(id, { ...state.jobs[idx], id });
+                    toast("Updated", `Status -> ${newStatus}`);
+                } catch (e) {
+                    state.jobs[idx] = prev;
+                    renderAll();
+                    toast("Update failed", e.message || String(e));
+                }
+            }
+
+            function nextStatus(id) {
+                const j = state.jobs.find(x => x.id === id);
+                if (!j) return;
+                const order = ["Applied", "Interview", "Offer", "Rejected"];
+                const i = order.indexOf(j.status);
+                updateStatus(id, order[(i + 1) % order.length]);
+            }
+
+            async function testApi() {
+                if (($("mode").value || "api") === "mock") { toast("Mode is mock", "Switch to API mode first."); return; }
+                try {
+                    const list = await apiGetJobs();
+                    toast("API OK", `GET /api/Jobs -> ${Array.isArray(list) ? list.length : 0} items`);
+                } catch (e) {
+                    toast("API FAIL", e.message || String(e));
+                }
+            }
+
+            function exportJobs() {
+                const blob = new Blob([JSON.stringify(state.jobs, null, 2)], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `jobtrackpro-jobs-${fmtDate(new Date().toISOString())}.json`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+                toast("Exported", "Downloaded JSON.");
+            }
+
+            async function importJobsFromFile(file) {
+                try {
+                    const text = await file.text();
+                    const arr = JSON.parse(text);
+                    if (!Array.isArray(arr)) throw new Error("JSON must be an array.");
+                    const norm = arr.map(normalizeJob);
+                    state.jobs = norm;
+                    state.localImportedJobs = norm;
+                    saveLocalImported(norm);
+                    $("mode").value = "mock";
+                    setBanner(true);
+                    toast("Imported", `${norm.length} jobs loaded locally.`);
+                    renderAll();
+                } catch (e) {
+                    toast("Import failed", e.message || String(e));
+                }
+            }
+
+            function clearLocalImport() {
+                localStorage.removeItem(LS.localImport);
+                state.localImportedJobs = null;
+                toast("Cleared", "Local imported dataset removed.");
+                reloadAll();
+            }
+
+            function setBanner(show) { $("mockBanner").classList.toggle("show", !!show); }
+            function wireEvents() {
+                document.querySelectorAll("#nav button").forEach(btn => {
+                    btn.addEventListener("click", () => showView(btn.dataset.view));
+                });
+
+                $("btnTheme").addEventListener("click", toggleTheme);
+                $("btnTheme2").addEventListener("click", toggleTheme);
+
+                $("btnNew").addEventListener("click", () => openDrawer("new"));
+                $("btnClose").addEventListener("click", closeDrawer);
+                $("drawerOverlay").addEventListener("click", closeDrawer);
+                $("btnSave").addEventListener("click", saveJob);
+
+                $("btnPing").addEventListener("click", testApi);
+                $("btnReload").addEventListener("click", reloadAll);
+
+                $("globalSearch").addEventListener("input", () => {
+                    state.globalSearch = $("globalSearch").value || "";
+                    renderAll();
+                });
+
+                $("btnApplyFilters").addEventListener("click", () => { state.page = 1; renderJobsTable(); });
+                $("btnRefreshJobs").addEventListener("click", reloadAll);
+                $("btnExportQuick").addEventListener("click", exportJobs);
+
+                $("btnPrev").addEventListener("click", () => { state.page = Math.max(1, state.page - 1); renderJobsTable(); });
+                $("btnNext").addEventListener("click", () => { state.page = state.page + 1; renderJobsTable(); });
+
+                $("mode").addEventListener("change", () => { localStorage.setItem(LS.mode, $("mode").value); reloadAll(); });
+                $("baseUrl").addEventListener("change", () => { localStorage.setItem(LS.baseUrl, $("baseUrl").value); });
+
+                $("btnExport").addEventListener("click", exportJobs);
+                $("importFile").addEventListener("change", (e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (file) importJobsFromFile(file);
+                    e.target.value = "";
+                });
+                $("btnClearLocal").addEventListener("click", clearLocalImport);
+
+                document.addEventListener("keydown", (e) => {
+                    const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : "";
+                    const inInput = ["input", "textarea", "select"].includes(tag);
+                    if (e.key === "Escape") closeDrawer();
+                    if (!inInput && e.key === "/") { e.preventDefault(); $("globalSearch").focus(); }
+                    if (!inInput && (e.key === "n" || e.key === "N")) openDrawer("new");
+                });
+            }
+
+            function showView(name) {
+                state.view = name;
+                for (const k of Object.keys(views)) views[k].style.display = (k === name) ? "" : "none";
+                for (const b of document.querySelectorAll("#nav button")) b.classList.toggle("active", b.dataset.view === name);
+                if (name === "kanban") renderKanban();
+                if (name === "calendar") renderAgenda();
+            }
+
+            async function reloadAll() {
+                const mode = $("mode").value;
+                state.usingMock = (mode === "mock");
+                state.localImportedJobs = loadLocalImported();
+
+                if (state.localImportedJobs && state.localImportedJobs.length) {
+                    state.jobs = state.localImportedJobs;
+                    state.usingMock = true;
+                    setBanner(true);
+                    toast("Loaded local imported data", "API not used for imported dataset.");
+                    renderAll();
+                    return;
+                }
+
+                if (state.usingMock) {
+                    state.jobs = mockJobs.map(normalizeJob);
+                    setBanner(true);
+                    renderAll();
+                    return;
+                }
+
+                try {
+                    const list = await apiGetJobs();
+                    state.jobs = Array.isArray(list) ? list.map(normalizeJob) : [];
+                    state.usingMock = false;
+                    setBanner(false);
+                    toast("Loaded from API", `${state.jobs.length} jobs`);
+                    renderAll();
+                } catch (err) {
+                    state.jobs = mockJobs.map(normalizeJob);
+                    state.usingMock = true;
+                    setBanner(true);
+                    toast("API unreachable", "Using mock data.");
+                    renderAll();
+                }
+            }
+
+            function setJobChip() { $("jobCountChip").textContent = `${state.jobs.length} jobs`; }
+
+            function init() {
+                applyTheme();
+                $("baseUrl").value = localStorage.getItem(LS.baseUrl) || window.location.origin;
+
+                $("mode").value = localStorage.getItem(LS.mode) || "api";
+                wireEvents();
+                showView("dashboard");
+                reloadAll();
+            }
+
+            init();
+        })();
+    </script>
+</body>
+</html>
