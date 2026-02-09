@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddTransient<JobTrackPro.Api.Middlewares.GlobalExceptionMiddleware>();
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -24,7 +25,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
+app.UseMiddleware<JobTrackPro.Api.Middlewares.GlobalExceptionMiddleware>();
 
 
 app.UseDefaultFiles();
