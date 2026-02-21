@@ -52,6 +52,8 @@ public class AppDbContext : DbContext, IAppDbContext
             entity.Property(x => x.CreatedAt).IsRequired();
 
             entity.Property(x => x.UpdatedAt).IsRequired();
+
+            entity.HasQueryFilter(x => !x.IsDeleted);
         });
     }
 }
