@@ -2,6 +2,9 @@ using JobTrackPro.Application.Common.Interfaces;
 using JobTrackPro.Application.Jobs.Commands.CreateJob;
 using JobTrackPro.Infrastructure.Persistence;
 using MediatR;
+
+using FluentValidation;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +18,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 builder.Services.AddScoped<IAppDbContext>(sp => sp.GetRequiredService<AppDbContext>());
-
+builder.Services.AddValidatorsFromAssembly(Assembly.Load("JobTrackPro.Application"));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 builder.Services.AddMediatR(typeof(CreateJobCommand));
 
