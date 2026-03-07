@@ -3,7 +3,7 @@
 
 using JobTrackPro.Application.Jobs.Commands.CreateJob;
 using JobTrackPro.Application.Jobs.Commands.UpdateJob;
-
+using JobTrackPro.Application.Jobs.Queries.GetJobStats;
 
 using JobTrackPro.Application.Jobs.Commands.DeleteJob;
 
@@ -72,5 +72,12 @@ public class JobsController : ControllerBase
     {
         await _mediator.Send(new DeleteJobCommand(id));
         return NoContent();
+    }
+
+    [HttpGet("stats")]
+    public async Task<IActionResult> GetStats()
+    {
+        var result = await _mediator.Send(new GetJobStatsQuery());
+        return Ok(result);
     }
 }
