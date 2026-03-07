@@ -9,7 +9,7 @@ using JobTrackPro.Application.Jobs.Commands.DeleteJob;
 
 using JobTrackPro.Application.Jobs.Queries.GetJobs;
 using JobTrackPro.Application.Jobs.Queries.GetById;
-
+using JobTrackPro.Domain.Enums;
 
 
 namespace JobTrackPro.Api.Controllers;
@@ -25,17 +25,19 @@ public class JobsController : ControllerBase
 
     public JobsController(IMediator mediator) => _mediator = mediator;
 
-    
+
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(
+    [FromQuery] string? search,
+    [FromQuery] ApplicationStatus? status,
+    [FromQuery] int page = 1,
+    [FromQuery] int pageSize = 10)
     {
-        var jobs = await _mediator.Send(new GetJobsQuery());
-
+        var jobs = await _mediator.Send(new GetJobsQuery(search, status, page, pageSize));
         return Ok(jobs);
-
     }
 
-    
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
