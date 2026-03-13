@@ -2,37 +2,32 @@
 
 using MediatR;
 
-public class ValidationBehavior<TRequest, TResponse>
+using ValidationException = JobTrackPro.Application.Common.Exceptions.ValidationException;
+
+namespace JobTrackPro.Application.Common.Behaviors;
+
+public class ValidationBehavior<TRequest, TResponse>(
+    IEnumerable<IValidator<TRequest>> validators)
     : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+    where TRequest : class, IRequest<TResponse>
 {
-    private readonly IEnumerable<IValidator<TRequest>> _validators;
-
-    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
-    {
-        _validators = validators;
-    }
-
     public async Task<TResponse> Handle(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        if (_validators.Any())
-        {
-            var context = new ValidationContext<TRequest>(request);
+        if (!validators.Any())
+            return await next();
 
-            var results = await Task.WhenAll(
-                _validators.Select(v => v.ValidateAsync(context, cancellationToken)));
+        var context = new ValidationContext<TRequest>(request);
+        var failures = validators
+            .Select(v => v.Validate(context))
+            .SelectMany(r => r.Errors)
+            .Where(f => f is not null)
+            .ToList();
 
-            var failures = results
-                .SelectMany(r => r.Errors)
-                .Where(f => f != null)
-                .ToList();
-
-            if (failures.Count != 0)
-                throw new ValidationException(failures);
-        }
+        if (failures.Count != 0)
+            throw new ValidationException(failures);
 
         return await next();
     }

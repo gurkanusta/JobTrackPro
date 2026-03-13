@@ -1,7 +1,7 @@
 ﻿using JobTrackPro.Application.Common.Interfaces;
 using JobTrackPro.Application.Common.Models;
 using JobTrackPro.Application.Jobs.DTOs;
-using JobTrackPro.Application.Common.Models;
+
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;

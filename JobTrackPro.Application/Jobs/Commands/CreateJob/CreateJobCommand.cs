@@ -7,5 +7,8 @@ public record CreateJobCommand(
     string CompanyName,
     string Position,
     ApplicationStatus Status,
-    DateTime ApplicationDate
+    string? JobUrl,           
+    string? Notes,            
+    DateTime? InterviewDate,
+    DateTime? ApplicationDate
 ) : IRequest<Guid>;

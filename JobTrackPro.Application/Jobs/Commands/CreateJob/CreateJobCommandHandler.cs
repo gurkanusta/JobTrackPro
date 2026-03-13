@@ -21,9 +21,10 @@ public sealed class CreateJobCommandHandler : IRequestHandler<CreateJobCommand, 
             CompanyName = request.CompanyName.Trim(),
             Position = request.Position.Trim(),
             Status = request.Status,
-            ApplicationDate = request.ApplicationDate,
+            ApplicationDate = request.ApplicationDate ?? DateTime.UtcNow,
 
-            
+
+
             UserId = "test-user",
 
             Notes = null,

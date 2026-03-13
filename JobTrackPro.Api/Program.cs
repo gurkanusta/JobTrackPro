@@ -1,7 +1,11 @@
+using JobTrackPro.Application.Common.Behaviors;
+
+
 using JobTrackPro.Application.Common.Interfaces;
 using JobTrackPro.Application.Jobs.Commands.CreateJob;
 using JobTrackPro.Infrastructure.Persistence;
 using MediatR;
+
 
 using FluentValidation;
 using System.Reflection;
@@ -22,7 +26,12 @@ builder.Services.AddValidatorsFromAssembly(Assembly.Load("JobTrackPro.Applicatio
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 builder.Services.AddMediatR(typeof(CreateJobCommand));
+builder.Services.AddValidatorsFromAssembly(
+    typeof(JobTrackPro.Application.AssemblyReference).Assembly);
 
+builder.Services.AddTransient(
+    typeof(IPipelineBehavior<,>),
+    typeof(ValidationBehavior<,>));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
