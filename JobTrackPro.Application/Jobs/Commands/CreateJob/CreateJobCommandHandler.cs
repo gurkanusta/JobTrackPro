@@ -30,7 +30,7 @@ public sealed class CreateJobCommandHandler : IRequestHandler<CreateJobCommand, 
             Notes = null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            IsDeleted = false
+            
         };
 
         _db.AddJobApplication(job);

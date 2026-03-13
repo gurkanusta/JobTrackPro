@@ -55,5 +55,8 @@ public class AppDbContext : DbContext, IAppDbContext
 
             entity.HasQueryFilter(x => !x.IsDeleted);
         });
+
+        modelBuilder.Entity<JobApplication>()
+        .HasQueryFilter(x => !x.IsDeleted);
     }
 }

@@ -24,5 +24,12 @@ public class JobApplication
     public DateTime UpdatedAt { get; set; }
 
 
-    public bool IsDeleted { get; set; }
+    public bool IsDeleted { get; private set; }
+    public DateTime? DeletedAt { get; private set; }
+
+    public void Delete()
+    {
+        IsDeleted = true;
+        DeletedAt = DateTime.UtcNow;
+    }
 }

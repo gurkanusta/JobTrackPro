@@ -1,15 +1,14 @@
-﻿using MediatR;
-
-
+﻿
 using JobTrackPro.Application.Jobs.Commands.CreateJob;
-using JobTrackPro.Application.Jobs.Commands.UpdateJob;
-using JobTrackPro.Application.Jobs.Queries.GetJobStats;
 
+using JobTrackPro.Application.Jobs.Commands.UpdateJob;
+using JobTrackPro.Application.Jobs.Queries.GetById;
+using JobTrackPro.Application.Jobs.Queries.GetJobs;
+using JobTrackPro.Application.Jobs.Queries.GetJobStats;
+using JobTrackPro.Domain.Enums;
 using JobTrackPro.Application.Jobs.Commands.DeleteJob;
 
-using JobTrackPro.Application.Jobs.Queries.GetJobs;
-using JobTrackPro.Application.Jobs.Queries.GetById;
-using JobTrackPro.Domain.Enums;
+using MediatR;
 
 
 namespace JobTrackPro.Api.Controllers;
@@ -66,18 +65,21 @@ public class JobsController : ControllerBase
     }
 
     
-    [HttpDelete("{id:guid}")]
-
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        await _mediator.Send(new DeleteJobCommand(id));
-        return NoContent();
-    }
+    
 
     [HttpGet("stats")]
     public async Task<IActionResult> GetStats()
     {
         var result = await _mediator.Send(new GetJobStatsQuery());
         return Ok(result);
+    }
+
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        await _mediator.Send(new DeleteJobCommand(id));
+        return NoContent(); 
     }
 }
