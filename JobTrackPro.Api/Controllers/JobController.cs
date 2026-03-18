@@ -7,7 +7,10 @@ using JobTrackPro.Application.Jobs.Queries.GetJobs;
 using JobTrackPro.Application.Jobs.Queries.GetJobStats;
 using JobTrackPro.Domain.Enums;
 using JobTrackPro.Application.Jobs.Commands.DeleteJob;
+using JobTrackPro.Application.Jobs.DTOs;
 
+using JobTrackPro.Application.Jobs.Queries.GetById;
+using JobTrackPro.Application.Common;
 using MediatR;
 
 
@@ -40,11 +43,13 @@ public class JobsController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var job = await _mediator.Send(new GetJobByIdQuery(id));
-        return Ok(job);
+        var result = await _mediator.Send(new GetJobByIdQuery(id));
+        return result.IsSuccess
+            ? Ok(result.Value)
+            : NotFound(new { error = result.Error });
     }
 
-    
+
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateJobCommand command)
     {
@@ -81,5 +86,16 @@ public class JobsController : ControllerBase
     {
         await _mediator.Send(new DeleteJobCommand(id));
         return NoContent(); 
+    }
+
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> Get(Guid id)
+    {
+        var result = await _mediator.Send(new GetJobByIdQuery(id));
+
+        return result.IsSuccess
+            ? Ok(result.Value)
+            : NotFound(new { error = result.Error });
     }
 }

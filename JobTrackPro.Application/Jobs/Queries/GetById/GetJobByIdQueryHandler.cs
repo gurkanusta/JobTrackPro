@@ -1,29 +1,38 @@
-﻿using JobTrackPro.Application.Common.Interfaces;
+﻿using JobTrackPro.Application.Common;
+using JobTrackPro.Application.Common.Interfaces;
 using JobTrackPro.Application.Jobs.DTOs;
+using JobTrackPro.Domain.Enums;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace JobTrackPro.Application.Jobs.Queries.GetById;
 
-public sealed class GetJobByIdQueryHandler : IRequestHandler<GetJobByIdQuery, JobDto>
+public record GetJobByIdQuery(Guid Id) : IRequest<Result<JobDto>>;
+
+public sealed class GetJobByIdQueryHandler
+    : IRequestHandler<GetJobByIdQuery, Result<JobDto>>
 {
     private readonly IAppDbContext _db;
 
     public GetJobByIdQueryHandler(IAppDbContext db) => _db = db;
 
-
-
-    public async Task<JobDto> Handle(GetJobByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<JobDto>> Handle(
+        GetJobByIdQuery request, CancellationToken ct)
     {
         var job = await _db.JobApplications
+            .FirstOrDefaultAsync(x => x.Id == request.Id, ct);
 
-            .Where(x => x.Id == request.Id && !x.IsDeleted)
-            .Select(x => new JobDto(x.Id, x.CompanyName, x.Position, x.Status, x.ApplicationDate))
-            .FirstOrDefaultAsync(cancellationToken);
+        if (job is null)
+            return Result<JobDto>.Failure("Job application not found.");
 
-
-        if (job is null) throw new InvalidOperationException("Job not found.");
-
-        return job;
+        return Result<JobDto>.Success(new JobDto(
+            job.Id,
+            job.CompanyName,
+            job.Position,
+            job.Status,
+            job.ApplicationDate
+        ));
     }
 }

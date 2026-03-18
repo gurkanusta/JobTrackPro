@@ -1,5 +1,7 @@
-﻿using JobTrackPro.Application.Common.Interfaces;
+﻿using JobTrackPro.Application.Common;
+using JobTrackPro.Application.Common.Interfaces;
 using JobTrackPro.Application.Jobs.DTOs;
+using JobTrackPro.Application.Jobs.Queries.GetById;
 using JobTrackPro.Domain.Enums;
 
 using MediatR;
@@ -36,4 +38,7 @@ public class GetJobStatsQueryHandler : IRequestHandler<GetJobStatsQuery, JobStat
             Rejected = rejected
         };
     }
+
+    
+    
 }
