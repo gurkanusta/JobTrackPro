@@ -12,10 +12,13 @@ using JobTrackPro.Domain.Enums;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace JobTrackPro.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class JobsController : ControllerBase
 {
     private readonly IMediator _mediator;
