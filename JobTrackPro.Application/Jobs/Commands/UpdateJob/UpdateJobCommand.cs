@@ -12,5 +12,8 @@ public record UpdateJobCommand(
     string Position,
     ApplicationStatus Status,
     DateTime ApplicationDate,
-    string? Notes
+    string? Notes,
+    string? JobUrl,
+    string? CompanyUrl,
+    DateTime? InterviewDate
 ) : IRequest<Unit>;

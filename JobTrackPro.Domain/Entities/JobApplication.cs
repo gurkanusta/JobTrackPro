@@ -9,6 +9,10 @@ public class JobApplication : BaseEntity
     public string Position { get; set; } = default!;
     public ApplicationStatus Status { get; set; } = ApplicationStatus.Applied;
     public DateTime ApplicationDate { get; set; } = DateTime.UtcNow;
+
+    public string? JobUrl { get; set; }
+    public string? CompanyUrl { get; set; }       
+    public DateTime? InterviewDate { get; set; }
     public string? Notes { get; set; }
     public string UserId { get; set; } = default!;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

@@ -17,9 +17,13 @@ public class CreateJobCommandValidator : AbstractValidator<CreateJobCommand>
             .MaximumLength(200).WithMessage("Position cannot exceed 200 characters.");
 
         RuleFor(x => x.JobUrl)
+     .Must(url => Uri.TryCreate(url, UriKind.Absolute, out _))
+     .When(x => !string.IsNullOrEmpty(x.JobUrl))
+     .WithMessage("Please enter a valid URL for the job posting.");
+        RuleFor(x => x.CompanyUrl)
             .Must(url => Uri.TryCreate(url, UriKind.Absolute, out _))
-            .When(x => !string.IsNullOrEmpty(x.JobUrl))
-            .WithMessage("Please enter a valid URL.");
+            .When(x => !string.IsNullOrEmpty(x.CompanyUrl))
+            .WithMessage("Please enter a valid URL for the company website.");
 
         RuleFor(x => x.InterviewDate)
             .GreaterThan(DateTime.UtcNow.AddDays(-1))

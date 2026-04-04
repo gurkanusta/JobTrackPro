@@ -7,7 +7,8 @@ public record CreateJobCommand(
     string CompanyName,
     string Position,
     ApplicationStatus Status,
-    string? JobUrl,           
+    string? JobUrl,
+    string? CompanyUrl,
     string? Notes,            
     DateTime? InterviewDate,
     DateTime? ApplicationDate

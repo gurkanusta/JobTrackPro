@@ -33,6 +33,9 @@ public sealed class UpdateJobCommandHandler : IRequestHandler<UpdateJobCommand, 
         job.ApplicationDate = request.ApplicationDate;
         job.Notes = string.IsNullOrWhiteSpace(request.Notes) ? null : request.Notes.Trim();
         job.UpdatedAt = DateTime.UtcNow;
+        job.JobUrl = string.IsNullOrWhiteSpace(request.JobUrl) ? null : request.JobUrl.Trim();      
+        job.CompanyUrl = string.IsNullOrWhiteSpace(request.CompanyUrl) ? null : request.CompanyUrl.Trim();  
+        job.InterviewDate = request.InterviewDate;
 
         _db.UpdateJobApplication(job);
         await _db.SaveChangesAsync(cancellationToken);

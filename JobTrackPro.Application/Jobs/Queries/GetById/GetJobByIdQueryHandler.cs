@@ -32,7 +32,11 @@ public sealed class GetJobByIdQueryHandler
             job.CompanyName,
             job.Position,
             job.Status,
-            job.ApplicationDate
+            job.ApplicationDate,
+            job.JobUrl,
+            job.CompanyUrl,
+            job.InterviewDate,
+            job.Notes
         ));
     }
 }

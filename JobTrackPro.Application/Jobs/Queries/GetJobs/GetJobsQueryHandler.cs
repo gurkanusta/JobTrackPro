@@ -46,7 +46,11 @@ public sealed class GetJobsQueryHandler : IRequestHandler<GetJobsQuery, PagedRes
                 x.CompanyName,
                 x.Position,
                 x.Status,
-                x.ApplicationDate
+                x.ApplicationDate,
+                x.JobUrl,
+                x.CompanyUrl,
+                x.InterviewDate,
+                x.Notes
             ))
             .ToListAsync(cancellationToken);
 

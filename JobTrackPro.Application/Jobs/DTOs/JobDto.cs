@@ -7,5 +7,9 @@ public record JobDto(
     string CompanyName,
     string Position,
     ApplicationStatus Status,
-    DateTime ApplicationDate
+    DateTime ApplicationDate,
+    string? JobUrl,
+    string? CompanyUrl,
+    DateTime? InterviewDate,
+    string? Notes
 );

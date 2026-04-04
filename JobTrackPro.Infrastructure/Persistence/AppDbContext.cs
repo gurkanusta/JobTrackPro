@@ -44,6 +44,15 @@ public class AppDbContext : IdentityDbContext<AppUser>, IAppDbContext
             entity.Property(x => x.Notes)
                 .HasMaxLength(1000);
 
+            entity.Property(x => x.JobUrl)
+    .HasMaxLength(500);
+
+            entity.Property(x => x.CompanyUrl)
+                .HasMaxLength(500);
+
+            entity.Property(x => x.InterviewDate)
+                .IsRequired(false);
+
             entity.Property(x => x.UserId)
                 .HasMaxLength(128)  
                 .IsRequired();
