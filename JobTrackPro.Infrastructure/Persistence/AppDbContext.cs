@@ -62,6 +62,16 @@ public class AppDbContext : IdentityDbContext<AppUser>, IAppDbContext
 
             
             entity.HasQueryFilter(x => !x.IsDeleted);
+
+            
+        });
+        modelBuilder.Entity<AppUser>(entity =>
+        {
+            entity.Property(x => x.RefreshToken)
+                .HasMaxLength(500);
+
+            entity.Property(x => x.RefreshTokenExpiry)
+                .IsRequired(false);
         });
     }
 }

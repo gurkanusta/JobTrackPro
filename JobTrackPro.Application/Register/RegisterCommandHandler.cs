@@ -24,6 +24,6 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Au
             request.Password,
             cancellationToken);
 
-        return new AuthResult(result.IsSuccess, result.Token, result.Error);
+        return new AuthResult(result.IsSuccess, result.Token, result.RefreshToken, result.Error);
     }
 }

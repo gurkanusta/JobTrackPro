@@ -13,11 +13,19 @@ public interface IAuthService
         string email,
         string password,
         CancellationToken cancellationToken = default);
+
+    Task<AuthServiceResult> RefreshTokenAsync(
+        
+        string refreshToken,
+        CancellationToken cancellationToken = default);
+
+    Task RevokeTokenAsync(string userId, CancellationToken cancellationToken = default);
 }
 
 
 public record AuthServiceResult(
     bool IsSuccess,
     string? Token,
+    string? RefreshToken,
     string? Error
 );

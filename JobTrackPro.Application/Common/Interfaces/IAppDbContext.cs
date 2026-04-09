@@ -10,6 +10,8 @@ public interface IAppDbContext
 
     void AddJobApplication(JobApplication job);
     void UpdateJobApplication(JobApplication job);
+    
+
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

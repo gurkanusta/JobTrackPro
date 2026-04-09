@@ -23,6 +23,6 @@ public sealed class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResu
             request.Password,
             cancellationToken);
 
-        return new AuthResult(result.IsSuccess, result.Token, result.Error);
+        return new AuthResult(result.IsSuccess, result.Token, result.RefreshToken, result.Error);
     }
 }

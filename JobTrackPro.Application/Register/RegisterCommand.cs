@@ -15,5 +15,6 @@ public record RegisterCommand(
 public record AuthResult(
     bool IsSuccess,
     string? Token,
+    string? RefreshToken,
     string? Error
 );
